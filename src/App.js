@@ -13,7 +13,7 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import { Avatar, Badge, Container } from "@material-ui/core";
+import { Avatar, Badge, Button, Card, CardActions, CardContent, Container, Paper } from "@material-ui/core";
 import avatarSrc from "./images/avatar.svg";
 import logoSrc from "./images/logo.svg";
 
@@ -30,10 +30,7 @@ const drawerWidth = 200;
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
+    width: "100%",
   },
   appBar: {
     width: `calc(100% - ${drawerWidth}px)`,
@@ -65,15 +62,29 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
 
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
   drawerPaper: {
     width: drawerWidth,
     boxShadow: `0px 1px 2px 0px rgba(225, 229, 235, 0.8),
                 0px 13px 27px 0px rgba(90, 97, 105, 0.15)`,
   },
+  drawer_title: {
+    fontSize: "13px",
+    fontWeight: 500,
+    lineHeight: "15px",
+    letterSpacing: "0em",
+  },
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
     backgroundColor: colors.grey4,
+  },
+  paper: {
+    height: "136px",
+    width: "382px",
   },
 }));
 
@@ -93,7 +104,7 @@ function ResponsiveDrawer(props) {
           <>
             <ListItem button key={text}>
               <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={text} className={classes.drawer_title} />
             </ListItem>
             <Divider />
           </>
@@ -135,16 +146,24 @@ function ResponsiveDrawer(props) {
       </nav>
       <main className={classes.content}>
         <div className={classes.toolbar} />
+        <Typography variant="h3">Dashhbord</Typography>
+        <div style={{ display: "flex", justifyContent: "space-around" }}>
           <Paper elevation={3} className={classes.paper} />
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-          elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-          consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi tincidunt ornare
-          massa eget egestas purus viverra accumsan in. In hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam
-          sem et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin nibh sit. Ornare aenean euismod
-          elementum nisi quis eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices
-          sagittis orci a.
-        </Typography>
+          <Paper elevation={3} className={classes.paper} />
+          <Paper elevation={3} className={classes.paper} />
+        </div>
+
+        <Typography variant="h3">Список товаров</Typography>
+        <Card>
+          <CardContent>
+            <Typography className={classes.drawer_title} color="textSecondary" gutterBottom>
+              Here will Table
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button size="small">Learn More</Button>
+          </CardActions>
+        </Card>
       </main>
     </div>
   );
