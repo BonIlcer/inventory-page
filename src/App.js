@@ -50,8 +50,8 @@ const categoriesIcons = [
   <img alt="Auction icon" src={auctionSrc} />,
   <img alt="Users icon" src={usersSrc} />,
   <img alt="Settings icon" src={settingsSrc} />,
-  <img alt="Currency icon" src={currencySrc} />,
   <img alt="Messages icon" src={messagesSrc} />,
+  <img alt="Currency icon" src={currencySrc} />,
   <img alt="Order icon" src={orderSrc} />,
 ];
 const drawerWidth = 200;
