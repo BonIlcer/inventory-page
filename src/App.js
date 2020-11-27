@@ -183,7 +183,7 @@ const ListSubItem = withStyles((theme) => ({
   selected: {},
 }))(MuiListItem);
 
-function ResponsiveDrawer(props) {
+function App(props) {
   const [open, setOpen] = useState(true);
   const [subSelectedIndex, setSubSelectedIndex] = useState(0);
   const classes = useStyles();
@@ -237,6 +237,7 @@ function ResponsiveDrawer(props) {
 
   return (
     <div className={classes.root}>
+      {/* Top of right panel */}
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
           <Typography noWrap className={classes.appBar_title}>
@@ -263,6 +264,8 @@ function ResponsiveDrawer(props) {
           <ArrowDropDownIcon className={classes.appBar_icon} />
         </Toolbar>
       </AppBar>
+
+      {/* Left panel */}
       <nav className={classes.drawer}>
         <Drawer
           classes={{
@@ -274,7 +277,10 @@ function ResponsiveDrawer(props) {
           {drawer}
         </Drawer>
       </nav>
+
+      {/* Main content of right panel */}
       <main className={classes.content}>
+        {/* Top offset */}
         <div className={classes.toolbar} />
 
         <Typography variant="h1" className={classes.content_title} style={{ marginBottom: "43px" }}>
@@ -304,4 +310,4 @@ function ResponsiveDrawer(props) {
   );
 }
 
-export default ResponsiveDrawer;
+export default App;
