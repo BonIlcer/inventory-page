@@ -78,6 +78,15 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 400,
     lineHeight: "15px",
   },
+  appBar_badge: {
+    top: "14px",
+    left: "12px",
+    transform: "none",
+    backgroundColor: "#FF0000",
+  },
+  appBar_badge_root: {
+    margin: "0px 22px 0px 12px",
+  },
   appBar_icon: {
     color: colors.grey3,
   },
@@ -227,7 +236,13 @@ function ResponsiveDrawer(props) {
           </Typography>
           <Divider orientation="vertical" light />
           {/*TODO fix badge position */}
-          <Badge badgeContent={2} color="error">
+          <Badge
+            badgeContent={2}
+            color="error"
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            overlap="rectangle"
+            classes={{ root: classes.appBar_badge_root, anchorOriginBottomRightRectangle: classes.appBar_badge }}
+          >
             <NotificationsIcon className={classes.appBar_icon} />
           </Badge>
           {/*TODO change color */}
