@@ -11,7 +11,7 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
-import { Avatar, Badge, Button, Card, CardActions, CardContent, Collapse, Container, Paper, SvgIcon } from "@material-ui/core";
+import { Avatar, Badge, Button, Card, CardActions, CardContent, Collapse, Container, Grid, Paper, SvgIcon } from "@material-ui/core";
 import avatarSrc from "./images/avatar.svg";
 import logoSrc from "./images/logo.svg";
 import inventorySrc from "./images/drawerInventory.svg";
@@ -55,6 +55,13 @@ const categoriesIcons = [
   <img alt="Currency icon" src={currencySrc} />,
   <img alt="Order icon" src={orderSrc} />,
 ];
+const cardList = [
+  [[7, "Товаров в инвентаре"], undefined],
+  [[45, "Товаров на подтверждении"], "59:03"],
+  [[23, "Товаров подтверждено"], undefined],
+  [[20, "Заказов оформлено"], undefined],
+];
+
 const drawerWidth = 200;
 
 const useStyles = makeStyles((theme) => ({
@@ -145,6 +152,55 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     height: "136px",
     width: "382px",
+    boxShadow: `0px 5px 19px 0px rgba(90, 97, 105, 0.12)`,
+    padding: "24px",
+    display: "flex",
+    alignItems: "center",
+  },
+  paper_title: {
+    flex: "1",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    fontWeight: 500,
+    fontSize: "16px",
+    lineHeight: "19px",
+    color: colors.navy,
+  },
+  paper_subTitle: {
+    flex: "1",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    fontSize: "12px",
+    fontWeight: 400,
+    lineHeight: "20px",
+    color: colors.grey2,
+  },
+  paper_timer: {
+    fontSize: "12px",
+    fontWeight: 400,
+    lineHeight: "20px",
+    color: "#FF0000",
+    marginRight: "8px",
+    marginLeft: "17px",
+  },
+  circle: {
+    border: `3px solid rgba(84, 173, 255, 1)`,
+    borderRadius: "152px",
+    width: "88px",
+    height: "88px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flexShrink: "0",
+    marginRight: "16px",
+  },
+  circle_title: {
+    fontSize: "40px",
+    fontWeight: 700,
+    lineHeight: "47px",
+    color: colors.navy,
   },
 }));
 
@@ -206,7 +262,13 @@ function App(props) {
       <List disablePadding>
         {categoriesList.map((item, index) => (
           <>
-            <ListItem disableGutters button key={item[0]} onClick={item.length > 1 ? handleClick : ""} selected={open && item.length > 1}>
+            <ListItem
+              disableGutters
+              button
+              key={item[0]}
+              onClick={item.length > 1 ? handleClick : undefined}
+              selected={open && item.length > 1}
+            >
               <ListItemIcon className={classes.listItemIcon}>{categoriesIcons[index]}</ListItemIcon>
               <ListItemText disableTypography primary={item[0]} className={classes.drawer_title} />
             </ListItem>
@@ -234,6 +296,25 @@ function App(props) {
       </List>
     </div>
   );
+
+  const ContentPaper = (props) => {
+    return (
+      <Paper className={classes.paper}>
+        <div className={classes.circle}>
+          <Typography className={classes.circle_title}>{props.count}</Typography>
+        </div>
+        <div style={{ position: "relative", minWidth: "100px" }}>
+          <Typography className={classes.paper_title}>{props.title}</Typography>
+          {props.timer !== undefined && (
+            <div style={{ position: "absolute", display: "flex", width: "100%" }}>
+              <Typography className={classes.paper_timer}>{props.timer}</Typography>
+              <Typography className={classes.paper_subTitle}>{"Время осталось"}</Typography>
+            </div>
+          )}
+        </div>
+      </Paper>
+    );
+  };
 
   return (
     <div className={classes.root}>
@@ -286,11 +367,13 @@ function App(props) {
         <Typography variant="h1" className={classes.content_title} style={{ marginBottom: "43px" }}>
           {text_Dashboard}
         </Typography>
-        <div style={{ display: "flex", justifyContent: "space-around" }}>
-          <Paper elevation={3} className={classes.paper} />
-          <Paper elevation={3} className={classes.paper} />
-          <Paper elevation={3} className={classes.paper} />
-        </div>
+        <Grid container justify="flex-start" spacing="3">
+          {cardList.map((value) => (
+            <Grid key={value[0]} item>
+              <ContentPaper count={value[0][0]} title={value[0][1]} timer={value[1]} />
+            </Grid>
+          ))}
+        </Grid>
 
         <Typography variant="h1" className={classes.content_title}>
           Список товаров
