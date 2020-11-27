@@ -77,13 +77,17 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "13px",
     fontWeight: 400,
     lineHeight: "15px",
-    letterSpacing: "0em",
   },
   appBar_icon: {
     color: colors.grey3,
   },
   avatar: {
     margin: "0px 23px",
+  },
+  username_title: {
+    fontSize: "14px",
+    fontWeight: 500,
+    lineHeight: "18px",
   },
   logoWrapper: {
     display: "flex",
@@ -163,8 +167,8 @@ const ListSubItem = withStyles((theme) => ({
 }))(MuiListItem);
 
 function ResponsiveDrawer(props) {
-  const [open, setOpen] = useState(false);
-  const [subSelectedIndex, setSubSelectedIndex] = useState(null);
+  const [open, setOpen] = useState(true);
+  const [subSelectedIndex, setSubSelectedIndex] = useState(0);
   const classes = useStyles();
   const userName = "Директор";
   const text_Dashboard = "Dashboard";
@@ -229,7 +233,9 @@ function ResponsiveDrawer(props) {
           {/*TODO change color */}
           <Divider orientation="vertical" light />
           <Avatar alt="user avatar" src={avatarSrc} className={classes.avatar} />
-          <Typography noWrap>{userName}</Typography>
+          <Typography noWrap className={classes.username_title}>
+            {userName}
+          </Typography>
           {/*TODO wrap icon with btn */}
           <ArrowDropDownIcon className={classes.appBar_icon} />
         </Toolbar>
