@@ -31,6 +31,7 @@ const colors = {
   grey2: `rgba(189, 194, 209, 1)`, // text, icon
   grey3: `rgba(217, 222, 229, 1)`, // icon
   grey4: `rgba(245, 246, 248, 1)`, // content background
+  navy: `rgba(61, 81, 112, 1)`, // text
 };
 const categoriesList = [
   ["Главная страница"],
@@ -118,7 +119,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     lineHeight: "15px",
     letterSpacing: "0em",
-    color: "rgba(61, 81, 112, 1)",
+    color: colors.navy,
   },
   listItemIcon: {
     height: "16px",
@@ -133,6 +134,13 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: "90px 53px 79px 51px",
     backgroundColor: colors.grey4,
+  },
+  content_title: {
+    fontSize: "20px",
+    fontWeight: 500,
+    lineHeight: "23px",
+    color: colors.navy,
+    marginBottom: "30px",
   },
   paper: {
     height: "136px",
@@ -268,17 +276,22 @@ function ResponsiveDrawer(props) {
       </nav>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Typography variant="h3">{text_Dashboard}</Typography>
+
+        <Typography variant="h1" className={classes.content_title} style={{ marginBottom: "43px" }}>
+          {text_Dashboard}
+        </Typography>
         <div style={{ display: "flex", justifyContent: "space-around" }}>
           <Paper elevation={3} className={classes.paper} />
           <Paper elevation={3} className={classes.paper} />
           <Paper elevation={3} className={classes.paper} />
         </div>
 
-        <Typography variant="h3">Список товаров</Typography>
+        <Typography variant="h1" className={classes.content_title}>
+          Список товаров
+        </Typography>
         <Card>
           <CardContent>
-            <Typography className={classes.drawer_title} color="textSecondary" gutterBottom>
+            <Typography className={classes.drawer_title} color="textSecondary">
               Here will Table
             </Typography>
           </CardContent>
