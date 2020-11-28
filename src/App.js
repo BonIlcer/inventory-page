@@ -11,7 +11,7 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
-import { Avatar, Badge, Button, Card, CardActions, CardContent, Collapse, Container, Grid, Paper, SvgIcon } from "@material-ui/core";
+import { Avatar, Badge, Button, Card, CardActions, CardContent, Collapse, Grid, Paper } from "@material-ui/core";
 import avatarSrc from "./images/avatar.svg";
 import logoSrc from "./images/logo.svg";
 import inventorySrc from "./images/drawerInventory.svg";
@@ -23,6 +23,7 @@ import settingsSrc from "./images/drawerSettings.svg";
 import currencySrc from "./images/drawerCurrency.svg";
 import messagesSrc from "./images/drawerMessages.svg";
 import orderSrc from "./images/drawerOrder.svg";
+import Table from "./components/Table";
 
 const colors = {
   white: `rgba(255, 255, 255, 1)`,
@@ -375,19 +376,11 @@ function App(props) {
           ))}
         </Grid>
 
-        <Typography variant="h1" className={classes.content_title}>
+        <Typography variant="h1" className={classes.content_title} style={{ marginTop: "60px" }}>
           Список товаров
         </Typography>
-        <Card>
-          <CardContent>
-            <Typography className={classes.drawer_title} color="textSecondary">
-              Here will Table
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button size="small">Learn More</Button>
-          </CardActions>
-        </Card>
+
+        <Table />
       </main>
     </div>
   );
