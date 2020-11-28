@@ -20,7 +20,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
-import { Input } from "@material-ui/core";
+import { Input, InputAdornment, InputBase, SvgIcon } from "@material-ui/core";
+import searchSrc from "../images/search.svg";
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -132,16 +133,15 @@ const useToolbarStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1),
   },
-  highlight:
-    theme.palette.type === "light"
-      ? {
-          color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-        }
-      : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark,
-        },
+
+  inputBase_root: {
+    border: "1px solid rgba(217, 222, 229, 1)",
+    borderRadius: "4px",
+    padding: "8px",
+  },
+  inputBase_input: {
+    padding: "0px",
+  },
   title: {
     flex: "1 1 100%",
   },
@@ -153,6 +153,14 @@ const EnhancedTableToolbar = (props) => {
 
   return (
     <Toolbar className={classes.root}>
+      <InputBase
+        classes={{ root: classes.inputBase_root, input: classes.inputBase_input }}
+        startAdornment={
+          <InputAdornment position="start">
+            <img alt="search icon" src={searchSrc} />
+          </InputAdornment>
+        }
+      />
       <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
         Nutrition
       </Typography>
