@@ -20,11 +20,13 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
-import { Input, InputAdornment, InputBase, SvgIcon } from "@material-ui/core";
+import { Button, Container, Input, InputAdornment, InputBase, SvgIcon } from "@material-ui/core";
 import searchSrc from "../images/search.svg";
 import filterSrc from "../images/filter.svg";
 import arrowUpSrc from "../images/arrowUp.svg";
 import arrowDownSrc from "../images/arrowDown.svg";
+
+const cyan = "rgba(0, 123, 255, 1)";
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -71,7 +73,7 @@ function stableSort(array, comparator) {
 const useToolbarStyles = makeStyles((theme) => ({
   root: {
     paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
+    paddingRight: theme.spacing(2),
   },
   search_root: {
     height: "32px",
@@ -211,6 +213,7 @@ function EnhancedTableHead(props) {
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
+              hideSortIcon
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : "asc"}
               onClick={createSortHandler(headCell.id)}
@@ -352,9 +355,12 @@ export default function EnhancedTable() {
             </TableBody>
           </Table>
         </TableContainer>
-        <IconButton>
-          <DeleteIcon></DeleteIcon>
-        </IconButton>
+        <Container style={{ padding: "16px", textAlign: "right" }}>
+          <Button disableElevation>Сбросить</Button>
+          <Button disableElevation variant="contained">
+            Заказать
+          </Button>
+        </Container>
       </Paper>
     </div>
   );
