@@ -384,8 +384,14 @@ export default function EnhancedTable() {
           </Table>
         </TableContainer>
         <Container style={{ padding: "16px", textAlign: "right" }}>
-          <Button disableElevation>Сбросить</Button>
-          <Button disableElevation variant="contained">
+          <Button disableElevation style={{ color: "rgba(61, 81, 112, 1)", marginRight: "8px", textTransform: "none" }}>
+            Сбросить
+          </Button>
+          <Button
+            disableElevation
+            variant="contained"
+            style={{ color: "rgba(255, 255, 255, 1)", backgroundColor: "rgba(0, 123, 255, 1)", textTransform: "none" }}
+          >
             Заказать
           </Button>
         </Container>
