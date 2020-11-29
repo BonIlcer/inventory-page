@@ -22,6 +22,9 @@ import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
 import { Input, InputAdornment, InputBase, SvgIcon } from "@material-ui/core";
 import searchSrc from "../images/search.svg";
+import filterSrc from "../images/filter.svg";
+import arrowUpSrc from "../images/arrowUp.svg";
+import arrowDownSrc from "../images/arrowDown.svg";
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -52,11 +55,9 @@ function descendingComparator(a, b, orderBy) {
   }
   return 0;
 }
-
 function getComparator(order, orderBy) {
   return order === "desc" ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
 }
-
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -66,6 +67,112 @@ function stableSort(array, comparator) {
   });
   return stabilizedThis.map((el) => el[0]);
 }
+
+const useToolbarStyles = makeStyles((theme) => ({
+  root: {
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(1),
+  },
+  search_root: {
+    height: "32px",
+    border: "1px solid rgba(217, 222, 229, 1)",
+    borderRadius: "4px",
+    padding: "8px 8px 8px 0px",
+    marginRight: "32px",
+  },
+  search_input: {
+    padding: "0px",
+  },
+  filter_root: {
+    display: "flex",
+    alignItems: "center",
+    flex: "1 1 100%",
+  },
+  filter_title: {
+    color: "rgba(61, 81, 112, 1)",
+    fontSize: "13px",
+    paddingTop: "5px",
+  },
+  rowsSelect_title: {
+    whiteSpace: "nowrap",
+    fontSize: "14px",
+    lineHeight: "21px",
+    color: "rgba(189, 194, 209, 1)",
+    marginRight: "16px",
+  },
+  rowsSelect_root: {
+    height: "20px",
+    width: "62px",
+    border: "1px solid rgba(217, 222, 229, 1)",
+    borderRadius: "4px",
+    padding: "4px 4px 4px 6px",
+    fontSize: "10px",
+    flexShrink: "0",
+  },
+  rowsSelect_input: {
+    textAlign: "right",
+    paddingRight: "2px",
+  },
+  rowsSelect_inputAdornment: {
+    display: "flex",
+    flexDirection: "column",
+    height: "inherit",
+  },
+}));
+
+const EnhancedTableToolbar = (props) => {
+  const classes = useToolbarStyles();
+  const { rowsPerPage, onChangeRowsPerPage } = props;
+  const maxRows = 25;
+  const minRows = 5;
+
+  const handleUpButtonClick = () => {
+    if (rowsPerPage !== maxRows) onChangeRowsPerPage(rowsPerPage + 5);
+  };
+  const handleDownButtonClick = () => {
+    if (rowsPerPage !== minRows) onChangeRowsPerPage(rowsPerPage - 5);
+  };
+
+  return (
+    <Toolbar className={classes.root}>
+      {/* Search input */}
+      <InputBase
+        classes={{ root: classes.search_root, input: classes.search_input }}
+        startAdornment={
+          <InputAdornment position="start">
+            <IconButton style={{ padding: "8px" }}>
+              <img alt="search icon" src={searchSrc} />
+            </IconButton>
+          </InputAdornment>
+        }
+      />
+      {/* Filter */}
+      <div className={classes.filter_root}>
+        <IconButton style={{ padding: "8px" }}>
+          <img alt="filter icon" src={filterSrc} />
+        </IconButton>
+        <Typography className={classes.filter_title}>Фильтр</Typography>
+      </div>
+
+      {/* Select rows per page */}
+      <Typography className={classes.rowsSelect_title}>Товаров в инвентаре</Typography>
+      <InputBase
+        value={rowsPerPage + " rows"}
+        classes={{ root: classes.rowsSelect_root, input: classes.rowsSelect_input }}
+        endAdornment={
+          <InputAdornment className={classes.rowsSelect_inputAdornment}>
+            <IconButton style={{ padding: "3px" }} onClick={handleUpButtonClick}>
+              <img alt="up arrow icon" src={arrowUpSrc} />
+            </IconButton>
+            <IconButton style={{ padding: "3px" }} onClick={handleDownButtonClick}>
+              <img alt="down arrow icon" src={arrowDownSrc} />
+            </IconButton>
+          </InputAdornment>
+        }
+      />
+    </Toolbar>
+  );
+};
 
 const headCells = [
   { id: "name", numeric: false, disablePadding: true, label: "Dessert (100g serving)" },
@@ -93,7 +200,9 @@ function EnhancedTableHead(props) {
         <TableCell padding="default">
           <Typography align="center">#</Typography>
         </TableCell>
-
+        <TableCell padding="default">
+          <Typography align="center">&nbsp;</Typography>
+        </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -127,47 +236,6 @@ function EnhancedTableHead(props) {
     </TableHead>
   );
 }
-
-const useToolbarStyles = makeStyles((theme) => ({
-  root: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-  },
-
-  inputBase_root: {
-    border: "1px solid rgba(217, 222, 229, 1)",
-    borderRadius: "4px",
-    padding: "8px",
-  },
-  inputBase_input: {
-    padding: "0px",
-  },
-  title: {
-    flex: "1 1 100%",
-  },
-}));
-
-const EnhancedTableToolbar = (props) => {
-  const classes = useToolbarStyles();
-  const { rowsPerPage, onChangeRowsPerPage } = props;
-
-  return (
-    <Toolbar className={classes.root}>
-      <InputBase
-        classes={{ root: classes.inputBase_root, input: classes.inputBase_input }}
-        startAdornment={
-          <InputAdornment position="start">
-            <img alt="search icon" src={searchSrc} />
-          </InputAdornment>
-        }
-      />
-      <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-        Nutrition
-      </Typography>
-      <input type="number" step={5} value={rowsPerPage} min={5} max={25} onChange={onChangeRowsPerPage} />
-    </Toolbar>
-  );
-};
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -228,8 +296,8 @@ export default function EnhancedTable() {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+  const handleChangeRowsPerPage = (rowPerPage) => {
+    setRowsPerPage(rowPerPage);
     setPage(0);
   };
 
@@ -239,16 +307,6 @@ export default function EnhancedTable() {
     <div className={classes.root}>
       <Paper className={classes.paper}>
         <EnhancedTableToolbar rowsPerPage={rowsPerPage} onChangeRowsPerPage={handleChangeRowsPerPage} />
-        {/* <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        /> */}
-
         <TableContainer>
           <Table className={classes.table} aria-labelledby="tableTitle" aria-label="enhanced table">
             <EnhancedTableHead
@@ -270,6 +328,9 @@ export default function EnhancedTable() {
 
                   return (
                     <TableRow hover role="checkbox" aria-checked={isItemSelected} tabIndex={-1} key={row.name} selected={isItemSelected}>
+                      <TableCell align="center">
+                        <Typography>{index + 1}</Typography>
+                      </TableCell>
                       <TableCell padding="checkbox" onClick={(event) => handleClick(event, row.name)}>
                         <Checkbox checked={isItemSelected} inputProps={{ "aria-labelledby": labelId }} />
                       </TableCell>
@@ -288,11 +349,6 @@ export default function EnhancedTable() {
                     </TableRow>
                   );
                 })}
-              {/* {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )} */}
             </TableBody>
           </Table>
         </TableContainer>

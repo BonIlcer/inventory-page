@@ -348,7 +348,7 @@ function App(props) {
       </AppBar>
 
       {/* Left panel */}
-      <nav className={classes.drawer}>
+      {/* <nav className={classes.drawer}>
         <Drawer
           classes={{
             paper: classes.drawerPaper,
@@ -358,7 +358,7 @@ function App(props) {
         >
           {drawer}
         </Drawer>
-      </nav>
+      </nav> */}
 
       {/* Main content of right panel */}
       <main className={classes.content}>
