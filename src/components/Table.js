@@ -332,7 +332,7 @@ export default function EnhancedTable() {
                   return (
                     <TableRow hover role="checkbox" aria-checked={isItemSelected} tabIndex={-1} key={row.name} selected={isItemSelected}>
                       <TableCell align="center">
-                        <Typography>{index + 1}</Typography>
+                        <Typography>{index + 1 + page * rowsPerPage}</Typography>
                       </TableCell>
                       <TableCell padding="checkbox" onClick={(event) => handleClick(event, row.name)}>
                         <Checkbox checked={isItemSelected} inputProps={{ "aria-labelledby": labelId }} />
