@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
-import { lighten, makeStyles } from "@material-ui/core/styles";
+import { createMuiTheme, lighten, makeStyles, ThemeProvider } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -20,16 +20,14 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
-import { Button, Container, Input, InputAdornment, InputBase, SvgIcon } from "@material-ui/core";
+import { Button, Chip, Container, Input, InputAdornment, InputBase, SvgIcon } from "@material-ui/core";
 import searchSrc from "../images/search.svg";
 import filterSrc from "../images/filter.svg";
 import arrowUpSrc from "../images/arrowUp.svg";
 import arrowDownSrc from "../images/arrowDown.svg";
 
-const cyan = "rgba(0, 123, 255, 1)";
-
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
+function createData(asin, price, fees, rank, rating) {
+  return { asin, price, fees, rank, rating };
 }
 
 const rows = [
@@ -177,11 +175,11 @@ const EnhancedTableToolbar = (props) => {
 };
 
 const headCells = [
-  { id: "name", numeric: false, disablePadding: true, label: "Dessert (100g serving)" },
-  { id: "calories", numeric: true, disablePadding: false, label: "Calories" },
-  { id: "fat", numeric: true, disablePadding: false, label: "Fat (g)" },
-  { id: "carbs", numeric: true, disablePadding: false, label: "Carbs (g)" },
-  { id: "protein", numeric: true, disablePadding: false, label: "Protein (g)" },
+  { id: "asin", numeric: false, disablePadding: true, label: "ASIN" },
+  { id: "price", numeric: true, disablePadding: false, label: "Price" },
+  { id: "fees", numeric: true, disablePadding: false, label: "Fees & Net" },
+  { id: "rank", numeric: true, disablePadding: false, label: "Rank" },
+  { id: "rating", numeric: true, disablePadding: false, label: "Rating" },
 ];
 
 function EnhancedTableHead(props) {
@@ -197,9 +195,9 @@ function EnhancedTableHead(props) {
   };
 
   return (
-    <TableHead style={{ backgroundColor: "#6ba4ff" }}>
+    <TableHead style={{ border: "1px solid rgba(217, 222, 229, 1)" }}>
       <TableRow>
-        <TableCell padding="default">
+        <TableCell padding="default" padding="none">
           <Typography align="center">#</Typography>
         </TableCell>
         <TableCell padding="default">
@@ -208,20 +206,16 @@ function EnhancedTableHead(props) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
+            align={headCell.numeric ? "right" : "center"}
             padding={headCell.disablePadding ? "none" : "default"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
-              hideSortIcon
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : "asc"}
               onClick={createSortHandler(headCell.id)}
             >
               {headCell.label}
-              {orderBy === headCell.id ? (
-                <span className={classes.visuallyHidden}>{order === "desc" ? "sorted descending" : "sorted ascending"}</span>
-              ) : null}
             </TableSortLabel>
           </TableCell>
         ))}
@@ -250,6 +244,15 @@ const useStyles = makeStyles((theme) => ({
   },
   table: {
     minWidth: 750,
+    "& td": {
+      color: "rgba(61, 81, 112, 1)",
+    },
+    "& th": {
+      color: "rgba(61, 81, 112, 1)",
+      fontWeight: 700,
+      lineHeight: "15px",
+      fontSize: "13px",
+    },
   },
   visuallyHidden: {
     border: 0,
@@ -262,12 +265,26 @@ const useStyles = makeStyles((theme) => ({
     top: 20,
     width: 1,
   },
+  img: {
+    backgroundColor: "rgba(61, 81, 112, 1)",
+    height: "64px",
+    width: "64px",
+    borderRadius: "2px",
+    verticalAlign: "middle",
+    marginRight: "16px",
+  },
+  chip: {
+    height: "20px",
+    color: "rgba(61, 81, 112, 1)",
+    backgroundColor: "rgba(240, 242, 244, 1)",
+    fontSize: "12px",
+  },
 }));
 
 export default function EnhancedTable() {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("calories");
+  const [orderBy, setOrderBy] = React.useState("price");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -326,24 +343,35 @@ export default function EnhancedTable() {
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.asin);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
-                    <TableRow hover role="checkbox" aria-checked={isItemSelected} tabIndex={-1} key={row.name} selected={isItemSelected}>
-                      <TableCell align="center">
+                    <TableRow hover role="checkbox" aria-checked={isItemSelected} tabIndex={-1} key={row.asin} selected={isItemSelected}>
+                      <TableCell align="center" style={{ fontSize: "13px", lineHeight: "15px", color: "rgba(189, 194, 209, 1)" }}>
                         <Typography>{index + 1 + page * rowsPerPage}</Typography>
                       </TableCell>
-                      <TableCell padding="checkbox" onClick={(event) => handleClick(event, row.name)}>
+                      <TableCell padding="checkbox" onClick={(event) => handleClick(event, row.asin)}>
                         <Checkbox checked={isItemSelected} inputProps={{ "aria-labelledby": labelId }} />
                       </TableCell>
-                      <TableCell component="th" id={labelId} scope="row" padding="none">
-                        {row.name}
+                      <TableCell id={labelId} scope="row" padding="none" style={{ padding: "12px 0px", display: "flex", height: "89px" }}>
+                        <div>
+                          <img className={classes.img} src={filterSrc} />
+                        </div>
+                        <div>
+                          <Typography style={{ fontSize: "14px", lineHeight: "18px", fontWeight: 500 }}>{row.asin}</Typography>
+                          <Typography style={{ fontSize: "14px", lineHeight: "21px", color: "rgba(189, 194, 209, 1)" }}>
+                            {"ASIN "}
+                            <span style={{ color: "rgba(61, 81, 112, 1)" }}>{"6gdh463"}</span>
+                            {" | updated today"}
+                          </Typography>
+                          <Chip className={classes.chip} label={"Beauty & Personal Care"} />
+                        </div>
                       </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                      <TableCell align="right">{"$ " + row.price}</TableCell>
+                      <TableCell align="right">{row.fees}</TableCell>
+                      <TableCell align="right">{row.rank}</TableCell>
+                      <TableCell align="right">{row.rating}</TableCell>
                       <TableCell align="center">
                         <IconButton onClick={() => alert("Item deleting...")}>
                           <DeleteIcon style={{ color: "rgba(189, 194, 209, 1)" }} />
