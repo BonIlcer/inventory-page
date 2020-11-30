@@ -369,7 +369,7 @@ function App(props) {
         <Typography variant="h1" className={classes.content_title} style={{ marginBottom: "43px" }}>
           {text_Dashboard}
         </Typography>
-        <Grid container justify="flex-start" spacing="3">
+        <Grid container justify="flex-start" spacing={3}>
           {cardList.map((value) => (
             <Grid key={value[0]} item>
               <ContentPaper count={value[0][0]} title={value[0][1]} timer={value[1]} />
