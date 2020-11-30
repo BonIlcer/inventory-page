@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -15,7 +15,23 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
-import { Button, Chip, Container, InputAdornment, InputBase } from "@material-ui/core";
+import {
+  Backdrop,
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  Chip,
+  Container,
+  Divider,
+  Fade,
+  FormControl,
+  InputAdornment,
+  InputBase,
+  InputLabel,
+  Modal,
+  OutlinedInput,
+} from "@material-ui/core";
 import searchSrc from "../images/search.svg";
 import filterSrc from "../images/filter.svg";
 import arrowUpSrc from "../images/arrowUp.svg";
@@ -293,15 +309,41 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "rgba(240, 242, 244, 1)",
     fontSize: "12px",
   },
+  modalContent: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    backgroundColor: "#FFF",
+    padding: "16px",
+    minWidth: "320px",
+    minHeight: "320px",
+    width: "600px",
+    color: "rgba(61, 81, 112, 1)",
+    "&:focus": {
+      outline: "none",
+    },
+  },
+  modalInput: {
+    border: "1px solid rgba(217, 222, 229, 1)",
+    padding: "0px 8px",
+    borderRadius: "4px",
+  },
+  modalInput_focused: {
+    border: "1px solid rgba(0, 123, 255, 1)",
+  },
 }));
 
 export default function EnhancedTable() {
   const classes = useStyles();
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("price");
-  const [selected, setSelected] = React.useState([]);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("price");
+  const [selected, setSelected] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const [openModal1, setOpen1] = useState(false);
+  const [openModal2, setOpen2] = useState(false);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -425,18 +467,88 @@ export default function EnhancedTable() {
           </Table>
         </TableContainer>
         <Container style={{ padding: "16px", textAlign: "right", marginRight: "0px" }}>
-          <Button disableElevation style={{ color: "rgba(61, 81, 112, 1)", marginRight: "8px", textTransform: "none" }}>
+          <Button
+            disableElevation
+            style={{ color: "rgba(61, 81, 112, 1)", marginRight: "8px", textTransform: "none" }}
+            onClick={() => setOpen1(true)}
+          >
             Сбросить
           </Button>
           <Button
             disableElevation
             variant="contained"
             style={{ color: "rgba(255, 255, 255, 1)", backgroundColor: "rgba(0, 123, 255, 1)", textTransform: "none" }}
+            onClick={() => setOpen2(true)}
           >
             Заказать
           </Button>
         </Container>
       </Paper>
+
+      {/* Modal */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openModal1 || openModal2}
+        onClose={() => {
+          setOpen1(false);
+          setOpen2(false);
+        }}
+        closeAfterTransition
+        disableAutoFocus={true}
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openModal1 || openModal2}>
+          <Card evelation={0} className={classes.modalContent}>
+            <Typography variant="h2" style={{ fontSize: "32px" }}>
+              Modal title
+            </Typography>
+            <Divider style={{ margin: "10px -16px" }} />
+            {openModal1 ? (
+              <>
+                <CardContent>
+                  <Typography paragraph>
+                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis
+                    natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque
+                    eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel,
+                  </Typography>
+                  <Typography>
+                    aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis
+                    eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend
+                    tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend
+                  </Typography>
+                </CardContent>
+                <CardContent>
+                  <InputBase placeholder="Placeholder" classes={{ root: classes.modalInput, focused: classes.modalInput_focused }} />
+                </CardContent>
+              </>
+            ) : (
+              <>
+                <CardMedia
+                  image="https://i.picsum.photos/id/766/600/500.jpg?blur=5&hmac=iDbUvGU4sQ65HshK5PGMBlKNuJ54fAD8U3B0Rg1IgKU"
+                  style={{ height: "0", paddingTop: "40%" }}
+                />
+                <CardContent>
+                  <div>
+                    <label htmlFor="modal-input" style={{ display: "block" }}>
+                      Input label
+                    </label>
+                    <InputBase
+                      id="modal-input"
+                      placeholder="Placeholder"
+                      classes={{ root: classes.modalInput, focused: classes.modalInput_focused }}
+                    />
+                  </div>
+                </CardContent>
+              </>
+            )}
+          </Card>
+        </Fade>
+      </Modal>
     </div>
   );
 }
