@@ -11,7 +11,7 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
-import { Avatar, Badge, Button, Card, CardActions, CardContent, Collapse, Grid, Paper } from "@material-ui/core";
+import { Avatar, Badge, Collapse, Grid, Paper } from "@material-ui/core";
 import avatarSrc from "./images/avatar.svg";
 import logoSrc from "./images/logo.svg";
 import inventorySrc from "./images/drawerInventory.svg";
