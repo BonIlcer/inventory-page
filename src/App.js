@@ -69,6 +69,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     width: "100%",
+    position: "relative",
   },
   appBar: {
     width: `calc(100% - ${drawerWidth}px)`,
@@ -348,7 +349,7 @@ function App(props) {
       </AppBar>
 
       {/* Left panel */}
-      {/* <nav className={classes.drawer}>
+      <nav className={classes.drawer}>
         <Drawer
           classes={{
             paper: classes.drawerPaper,
@@ -358,7 +359,7 @@ function App(props) {
         >
           {drawer}
         </Drawer>
-      </nav> */}
+      </nav>
 
       {/* Main content of right panel */}
       <main className={classes.content}>
@@ -382,6 +383,7 @@ function App(props) {
 
         <Table />
       </main>
+      <div className={classes.appBar} style={{ position: "absolute", bottom: "0" }} />
     </div>
   );
 }
