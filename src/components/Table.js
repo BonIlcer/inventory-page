@@ -197,15 +197,16 @@ function EnhancedTableHead(props) {
   return (
     <TableHead style={{ border: "1px solid rgba(217, 222, 229, 1)" }}>
       <TableRow>
-        <TableCell padding="default" padding="none">
+        <TableCell padding="none">
           <Typography align="center">#</Typography>
         </TableCell>
-        <TableCell padding="default">
+        <TableCell padding="none">
           <Typography align="center">&nbsp;</Typography>
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
+            padding="none"
             align={headCell.numeric ? "right" : "center"}
             padding={headCell.disablePadding ? "none" : "default"}
             sortDirection={orderBy === headCell.id ? order : false}
@@ -221,7 +222,7 @@ function EnhancedTableHead(props) {
         ))}
 
         {/* Pagination */}
-        <TableCell align="center">
+        <TableCell align="center" padding="none">
           <IconButton aria-label="prev page" onClick={handlePrevButtonClick} disabled={page === 0}>
             <KeyboardArrowLeftIcon />
           </IconButton>
