@@ -25,6 +25,7 @@ import searchSrc from "../images/search.svg";
 import filterSrc from "../images/filter.svg";
 import arrowUpSrc from "../images/arrowUp.svg";
 import arrowDownSrc from "../images/arrowDown.svg";
+import calculateSrc from "../images/calculate.svg";
 
 function createData(asin, price, fees, rank, rating) {
   return { asin, price, fees, rank, rating };
@@ -175,15 +176,20 @@ const EnhancedTableToolbar = (props) => {
 };
 
 const headCells = [
-  { id: "asin", numeric: false, disablePadding: true, label: "ASIN" },
-  { id: "price", numeric: true, disablePadding: false, label: "Price" },
-  { id: "fees", numeric: true, disablePadding: false, label: "Fees & Net" },
-  { id: "rank", numeric: true, disablePadding: false, label: "Rank" },
-  { id: "rating", numeric: true, disablePadding: false, label: "Rating" },
+  { id: "asin", align: "center", disablePadding: true, label: "ASIN" },
+  { id: "price", align: "right", disablePadding: false, label: "Price" },
+  { id: "fees", align: "left", disablePadding: false, label: "Fees & Net" },
+  { id: "rank", align: "right", disablePadding: false, label: "Rank" },
+  { id: "rating", align: "right", disablePadding: false, label: "Rating" },
 ];
 
+const useTableHeadStyles = makeStyles((theme) => ({
+  root: { borderRadius: "3px", padding: "6px 8px 6px 10px", color: "rgba(0, 123, 255, 1)", backgroundColor: "rgba(237, 246, 255, 1)" },
+}));
+
 function EnhancedTableHead(props) {
-  const { classes, order, orderBy, rowCount, onRequestSort, page, rowsPerPage, onChangePage } = props;
+  const classes = useTableHeadStyles();
+  const { order, orderBy, rowCount, onRequestSort, page, rowsPerPage, onChangePage } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -207,7 +213,7 @@ function EnhancedTableHead(props) {
           <TableCell
             key={headCell.id}
             padding="none"
-            align={headCell.numeric ? "right" : "center"}
+            align={headCell.align}
             padding={headCell.disablePadding ? "none" : "default"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -215,6 +221,7 @@ function EnhancedTableHead(props) {
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : "asc"}
               onClick={createSortHandler(headCell.id)}
+              style={headCell.id === "fees" ? { paddingLeft: "30%" } : undefined}
             >
               {headCell.label}
             </TableSortLabel>
@@ -223,10 +230,21 @@ function EnhancedTableHead(props) {
 
         {/* Pagination */}
         <TableCell align="center" padding="none">
-          <IconButton aria-label="prev page" onClick={handlePrevButtonClick} disabled={page === 0}>
+          <IconButton
+            aria-label="prev page"
+            onClick={handlePrevButtonClick}
+            disabled={page === 0}
+            classes={{ root: classes.root }}
+            style={{ marginRight: "6px" }}
+          >
             <KeyboardArrowLeftIcon />
           </IconButton>
-          <IconButton aria-label="next page" onClick={handleNextButtonClick} disabled={page >= Math.ceil(rowCount / rowsPerPage) - 1}>
+          <IconButton
+            aria-label="next page"
+            onClick={handleNextButtonClick}
+            disabled={page >= Math.ceil(rowCount / rowsPerPage) - 1}
+            classes={{ root: classes.root }}
+          >
             <KeyboardArrowRightIcon />
           </IconButton>
         </TableCell>
@@ -242,6 +260,7 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     width: "100%",
     marginBottom: theme.spacing(2),
+    boxShadow: `0px 3px 12px 0px rgba(0, 0, 0, 0.15)`,
   },
   table: {
     minWidth: 750,
@@ -331,7 +350,6 @@ export default function EnhancedTable() {
         <TableContainer>
           <Table className={classes.table} aria-labelledby="tableTitle" aria-label="enhanced table">
             <EnhancedTableHead
-              classes={classes}
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
@@ -349,30 +367,58 @@ export default function EnhancedTable() {
 
                   return (
                     <TableRow hover role="checkbox" aria-checked={isItemSelected} tabIndex={-1} key={row.asin} selected={isItemSelected}>
+                      {/* # */}
                       <TableCell align="center" style={{ fontSize: "13px", lineHeight: "15px", color: "rgba(189, 194, 209, 1)" }}>
                         <Typography>{index + 1 + page * rowsPerPage}</Typography>
                       </TableCell>
+                      {/* checkbox */}
                       <TableCell padding="checkbox" onClick={(event) => handleClick(event, row.asin)}>
                         <Checkbox checked={isItemSelected} inputProps={{ "aria-labelledby": labelId }} />
                       </TableCell>
-                      <TableCell id={labelId} scope="row" padding="none" style={{ padding: "12px 0px", display: "flex", height: "89px" }}>
-                        <div>
-                          <img className={classes.img} src={filterSrc} />
-                        </div>
-                        <div>
-                          <Typography style={{ fontSize: "14px", lineHeight: "18px", fontWeight: 500 }}>{row.asin}</Typography>
-                          <Typography style={{ fontSize: "14px", lineHeight: "21px", color: "rgba(189, 194, 209, 1)" }}>
-                            {"ASIN "}
-                            <span style={{ color: "rgba(61, 81, 112, 1)" }}>{"6gdh463"}</span>
-                            {" | updated today"}
-                          </Typography>
-                          <Chip className={classes.chip} label={"Beauty & Personal Care"} />
+                      {/* ASIN */}
+                      <TableCell id={labelId} scope="row" padding="none" style={{ padding: "12px 0px", height: "88px" }}>
+                        <div style={{ display: "inline-flex" }}>
+                          <div>
+                            <img alt="placeholder" className={classes.img} src={filterSrc} />
+                          </div>
+                          <div>
+                            <Typography style={{ fontSize: "14px", lineHeight: "18px", fontWeight: 500 }}>{row.asin}</Typography>
+                            <Typography style={{ fontSize: "14px", lineHeight: "21px", color: "rgba(189, 194, 209, 1)" }}>
+                              {"ASIN "}
+                              <span style={{ color: "rgba(61, 81, 112, 1)" }}>{"6gdh463"}</span>
+                              {" | updated today"}
+                            </Typography>
+                            <Chip className={classes.chip} label={"Beauty & Personal Care"} />
+                          </div>
                         </div>
                       </TableCell>
+                      {/* Price */}
                       <TableCell align="right">{"$ " + row.price}</TableCell>
-                      <TableCell align="right">{row.fees}</TableCell>
-                      <TableCell align="right">{row.rank}</TableCell>
+                      {/* Fees */}
+                      <TableCell align="left">
+                        <div style={{ paddingLeft: "30%" }}>
+                          <Typography style={{ fontSize: "14px", lineHeight: "21px", color: "rgba(189, 194, 209, 1)" }}>
+                            {"Fees "}
+                            <span style={{ color: "rgba(61, 81, 112, 1)" }}>{"$" + row.fees}</span>
+                          </Typography>
+                          <Typography style={{ fontSize: "14px", lineHeight: "21px", color: "rgba(189, 194, 209, 1)" }}>
+                            {"Net "}
+                            <span style={{ color: "rgba(61, 81, 112, 1)" }}>{"$" + (row.fees + 1)}</span>
+                          </Typography>
+                          <Button
+                            disableElevation
+                            style={{ color: "rgba(0, 123, 255, 1)", paddingTop: "0px", paddingBottom: "0px", textTransform: "none" }}
+                            startIcon={<img alt="calculate icon" src={calculateSrc} />}
+                          >
+                            Calculate fees
+                          </Button>
+                        </div>
+                      </TableCell>
+                      {/* Rank */}
+                      <TableCell align="right">{"#" + row.rank}</TableCell>
+                      {/* Rating */}
                       <TableCell align="right">{row.rating}</TableCell>
+                      {/* Delete button */}
                       <TableCell align="center">
                         <IconButton onClick={() => alert("Item deleting...")}>
                           <DeleteIcon style={{ color: "rgba(189, 194, 209, 1)" }} />
@@ -384,7 +430,7 @@ export default function EnhancedTable() {
             </TableBody>
           </Table>
         </TableContainer>
-        <Container style={{ padding: "16px", textAlign: "right" }}>
+        <Container style={{ padding: "16px", textAlign: "right", marginRight: "0px" }}>
           <Button disableElevation style={{ color: "rgba(61, 81, 112, 1)", marginRight: "8px", textTransform: "none" }}>
             Сбросить
           </Button>
